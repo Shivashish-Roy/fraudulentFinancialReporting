@@ -5,7 +5,7 @@ import pandas_datareader as pddata
 import yfinance as yf
 from Formulas import *
 from formulas3 import *
-
+from benfordslaw import benfordslaw
 
 st.title("Financial Forensics")
 st.header("What is Financial Forensics?")
@@ -182,6 +182,22 @@ else:
     st.table(altmanZScoreTable)
     ###############################################################################################
     # Beneford law
+    yearChoice = st.text_input("Enter a year",value = '2022')
+    digitChoice = st.number_input("Enter a digit position",min_value = 1, max_value = 2, step=1)
+    ### Function To calculate Beneford law
+    def calcBL(yearChoice,digitChoice):
+        if digitChoice==1:
+            bl = benfordslaw(alpha=0.05)
+        else:
+            bl = benfordslaw(alpha=0.05,pos=digitChoice)
+        result = bl.fit(tickerObject.balancesheet[['{}'.format(yearChoice)+'-03-31']])
+        
+        figure = bl.plot()
+        st.write("### The beneford law test for {}st digit is ".format(digitChoice))
+        st.pyplot(figure[0])
+        
+    calcBL(yearChoice,digitChoice)
+     
 
 
     ##################################################################################################
